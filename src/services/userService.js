@@ -104,7 +104,7 @@ let createNewUser = (data) => {
                     lastName: data.lastName,
                     address: data.address,
                     phonenumber: data.phonenumber,
-                    gender: data.gender === "1" ? true : false,
+                    gender: data.gender === "1",
                     roleId: data.roleId,
                 });
     
@@ -122,7 +122,7 @@ let createNewUser = (data) => {
 let hashUserPassword = (password) => {
     return new Promise(async (resolve, reject) => {
         try {
-            var hashPassword = await bcrypt.hashSync(password, salt);
+            let hashPassword = await bcrypt.hashSync(password, salt);
             resolve(hashPassword);
         } catch (err) {
             reject(err);
@@ -169,19 +169,21 @@ let updateUserData = (data) => {
             });
 
             if (user) {
-                user.firstName = data.firstName,
-                user.lastName = data.lastName,
-                user.address = data.address,
+                user.firstName = data.firstName;
+                user.lastName = data.lastName;
+                user.address = data.address;
                 await user.save()
                 resolve({
                     errCode: 0,
                     message: "Update user successfully"
                 });
-            } 
-            resolve({
-                errCode: 1,
-                errMessage: "User not found"
-            });
+            } else {
+                resolve({
+                    errCode: 1,
+                    errMessage: "User not found"
+                });
+            }
+
         } catch (err) {
             reject(err);
         }
